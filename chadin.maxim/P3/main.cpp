@@ -1,7 +1,6 @@
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
-
 namespace chadin
 {
   std::istream & readArr(std::istream & input, int * arr, size_t rows, size_t cols);

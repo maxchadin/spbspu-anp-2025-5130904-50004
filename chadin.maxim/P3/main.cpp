@@ -36,15 +36,68 @@ std::ostream & chadin::writeArr(std::ostream & output, const int * arr, size_t r
     for (size_t j = 0; j < cols; ++j)
     {
       output << arr[i * cols + j];
-      if (j < cols - 1) output << " "; // Разделитель внутри строки
+      if (j < cols - 1) output << " ";
     }
-    output << "\n"; // Новая строка после каждой строки матрицы
+    output << "\n";
   }
   return output;
 }
 
 void chadin::increaseElements(int * arr, size_t rows, size_t cols)
 {
+  if (rows == 0 || cols == 0) return;
+
+  size_t t = rows * cols;
+  int * temp = new int [t];
+  for (size_t i = 0; i < t; i++)
+  {
+    temp[i] = arr[i];
+  }
+
+  int left = 0;
+  int right = cols - 1;
+  int up = 0;
+  int down = rows - 1;
+  int step = 1;
+
+  while (left <= right && up <= down)
+  {
+    for (int i = down; i >= up; i--)
+    {
+      size_t index = i * cols + left;
+      temp[index] += step++;
+    }
+    left++;
+    if (left > right) break;
+    for (int j = left; j <= right; j++)
+    {
+      size_t index = down * cols + j;
+      temp[index] += step++;
+    }
+    if (up == down) break;
+    down--;
+    if (up > down) break;
+    for (int j = right; j >= left; j--)
+    {
+      size_t index = down * cols + j;
+      temp[index] += step++;
+    }
+    if (left == right) break;
+    right--;
+    if (left > right) break;
+    for (int i = down - 1; i >= up; i--)
+    {
+      size_t index = i * cols + right;
+      temp[index] += step++;
+    }
+    up++;
+  }
+
+  for (size_t i = 0; i < t; i++)
+  {
+    arr[i] = temp[i];
+  }
+  delete[] temp;
 }
 
 int chadin::countDiagonals(const int * arr, size_t rows, size_t cols)

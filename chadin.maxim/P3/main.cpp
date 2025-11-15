@@ -140,3 +140,104 @@ int chadin::countDiagonals(const int * arr, size_t rows, size_t cols)
   }
   return count;
 }
+
+int main()
+{
+  if (argc > 4)
+  {
+    std::cerr << "Too many arguments" << "\n";
+    return 1;
+  }
+  if (argc < 4)
+  {
+    std::cerr << "Not enough arguments" <<"\n";
+    return 1;
+  }
+  if (argv[1][0] != '1' && argv[1][0] != '2')
+  {
+    std::cerr << "First parameter is out of range or first parameter is not a number" << "\n";
+    return 1;
+  }
+  std::ifstream input(argv[2]);
+  std::ofstream output(argv[3]);
+  if (!input.is_open() || !output.is_open())
+  {
+    std::cerr << "Error opening files" << "\n";
+    return 1;
+  }
+  size_t rows = 0;
+  size_t cols = 0;
+  int result = 0;
+  if (!(input >> rows))
+  {
+    std::cerr << "Incorrect number of rows" << "\n";
+    return 2;
+  }
+  else if (!(input >>cols))
+  {
+    std::cerr << "Incorrect number of columns" << "\n";
+    return 2;
+  }
+  if (argv[1][0] == '1')
+  {
+    if (rows * cols > 10000)
+    {
+      std::cerr << "Too large matrix" << "\n";
+      return 2;
+    }
+    int arr[10000] = {};
+    chadin::readArr(input, arr, rows, cols);
+    if (!input)
+    {
+      return 2;
+    }
+    input.close();
+    result = chadin::countDiagonals(arr, rows, cols);
+    chadin::writeArr(output, arr, rows, cols, result);
+  }
+  else if (argv[1][0] == '2')
+  {
+    int * arr = nullptr;
+    try
+    {
+      if (rows > 0 && cols > 0) {
+        if (rows > SIZE_MAX / cols) {
+          std::cerr << "Too large matrix" << "\n";
+          return 2;
+        }
+        size_t total_elements = rows * cols;
+        if (total_elements > SIZE_MAX / sizeof(int)) {
+          std::cerr << "Too large matrix" << "\n";
+          return 2;
+        }
+        arr = new int[total_elements] {};
+      } else {
+          arr = nullptr;
+      }
+      chadin::readArr(input, arr, rows, cols);
+      if (!input)
+      {
+        delete[] arr;
+        return 2;
+      }
+      input.close();
+      chadin::increaseElements(arr, rows, cols);
+      chadin::writeArr(output, arr, rows, cols, 0);
+
+      delete[] arr;
+    }
+    catch (const std::bad_alloc&)
+    {
+      std::cerr << "Error" << "\n";
+      delete[] arr;
+      return 1;
+    }
+    catch (...)
+    {
+      std::cerr << "Error" << "\n";
+      delete[] arr;
+      return 1;
+    }
+  }
+  return 0;
+}

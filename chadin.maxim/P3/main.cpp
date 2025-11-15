@@ -102,4 +102,41 @@ void chadin::increaseElements(int * arr, size_t rows, size_t cols)
 
 int chadin::countDiagonals(const int * arr, size_t rows, size_t cols)
 {
+  if (rows == 0 || cols == 0) {
+    return 0;
+  }
+  int count = 0;
+  for (size_t start_col = 0; start_col < cols; start_col++) {
+    bool has_zero = false;
+    size_t r = 0;
+    size_t c = start_col;
+    while (r < rows && c < cols) {
+      if (arr[r * cols + c] == 0) {
+        has_zero = true;
+        break;
+      }
+      r++;
+      c++;
+    }
+    if (!has_zero) {
+      count++;
+    }
+  }
+  for (size_t start_row = 1; start_row < rows; start_row++) {
+    bool has_zero = false;
+    size_t r = start_row;
+    size_t c = 0;
+    while (r < rows && c < cols) {
+      if (arr[r * cols + c] == 0) {
+        has_zero = true;
+        break;
+      }
+      r++;
+      c++;
+    }
+    if (!has_zero) {
+      count++;
+    }
+  }
+  return count;
 }

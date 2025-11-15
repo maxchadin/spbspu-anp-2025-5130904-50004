@@ -30,6 +30,17 @@ std::istream & chadin::readArr(std::istream & input, int * arr, size_t rows, siz
 
 std::ostream & chadin::writeArr(std::ostream & output, const int * arr, size_t rows, size_t cols, int result)
 {
+  output << result << "\n";
+  for (size_t i = 0; i < rows; ++i)
+  {
+    for (size_t j = 0; j < cols; ++j)
+    {
+      output << arr[i * cols + j];
+      if (j < cols - 1) output << " "; // Разделитель внутри строки
+    }
+    output << "\n"; // Новая строка после каждой строки матрицы
+  }
+  return output;
 }
 
 void chadin::increaseElements(int * arr, size_t rows, size_t cols)
